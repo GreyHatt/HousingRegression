@@ -4,6 +4,8 @@ services:
   app:
     build: .
     container_name: housingregression_app
+    volumes:
+      - ./output:/app/output
     command: python regression.py
     # Uncomment below for interactive usage
     # stdin_open: true

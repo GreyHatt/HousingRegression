@@ -1,7 +1,11 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split as sklearn_train_test_split
+from sklearn.model_selection import (
+    train_test_split as sklearn_train_test_split,
+    GridSearchCV
+)
 from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
 
 def load_data():
     data_url = "http://lib.stat.cmu.edu/datasets/boston"
@@ -26,3 +30,22 @@ def evaluate_model(model, X_test, y_test):
     mse = mean_squared_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     return mse, r2
+
+def grid_search_cv(model, param_grid, X_train, y_train, scoring='neg_mean_squared_error', cv=5):
+    grid_search = GridSearchCV(model, param_grid, scoring=scoring, cv=cv, n_jobs=-1)
+    grid_search.fit(X_train, y_train)
+    return grid_search
+
+def comparison_graph(df):
+    df = pd.DataFrame(df)
+    plt.figure(figsize=(10,4))
+    plt.subplot(1,2,1)
+    plt.bar(df['Model'], df['MSE'], color='skyblue')
+    plt.title('MSE (lower is better)')
+    plt.ylabel('MSE')
+    plt.subplot(1,2,2)
+    plt.bar(df['Model'], df['R2'], color='lightgreen')
+    plt.title('R2 Score (higher is better)')
+    plt.ylabel('R2')
+    plt.tight_layout()
+    plt.savefig("/app/output/comparison_plot.png")
