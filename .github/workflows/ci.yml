@@ -1,0 +1,16 @@
+name: CI
+
+on: push
+
+jobs:
+  docker-build-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t housingregression .
+
+      - name: Run regression script in Docker
+        run: docker run --rm housingregression

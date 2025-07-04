@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: housingregression_app
+    command: python regression.py
+    # Uncomment below for interactive usage
+    # stdin_open: true
+    # tty: true
